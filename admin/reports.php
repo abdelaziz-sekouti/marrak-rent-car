@@ -135,19 +135,19 @@ $page_title = 'Reports & Analytics';
                 <!-- Report Type Tabs -->
                 <div class="mb-6">
                     <div class="report-tabs space-x-2">
-                        <button onclick="changeReportType('revenue')" id="tab-revenue" class="<?php echo $report_type === 'revenue' ? 'active' : ''; ?>">
+                        <button onclick="changeReportType('revenue')" id="tab-revenue" class="<?php echo $report_type === 'revenue' ? 'active' : ''; ?> hover:text-blue-400 hover:underline transition-all">
                             <i class="fas fa-dollar-sign mr-2"></i>
                             Revenue
                         </button>
-                        <button onclick="changeReportType('rentals')" id="tab-rentals" class="<?php echo $report_type === 'rentals' ? 'active' : ''; ?>">
+                        <button onclick="changeReportType('rentals')" id="tab-rentals" class="<?php echo $report_type === 'rentals' ? 'active' : ''; ?> hover:text-blue-400 hover:underline transition-all">
                             <i class="fas fa-car mr-2"></i>
                             Rentals
                         </button>
-                        <button onclick="changeReportType('cars')" id="tab-cars" class="<?php echo $report_type === 'cars' ? 'active' : ''; ?>">
+                        <button onclick="changeReportType('cars')" id="tab-cars" class="<?php echo $report_type === 'cars' ? 'active' : ''; ?> hover:text-blue-400 hover:underline transition-all">
                             <i class="fas fa-car-side mr-2"></i>
                             Cars
                         </button>
-                        <button onclick="changeReportType('customers')" id="tab-customers" class="<?php echo $report_type === 'customers' ? 'active' : ''; ?>">
+                        <button onclick="changeReportType('customers')" id="tab-customers" class="<?php echo $report_type === 'customers' ? 'active' : ''; ?> hover:text-blue-400 hover:underline transition-all">
                             <i class="fas fa-users mr-2"></i>
                             Customers
                         </button>
