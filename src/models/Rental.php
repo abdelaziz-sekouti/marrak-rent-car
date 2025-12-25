@@ -297,4 +297,192 @@ class Rental {
         
         return $errors;
     }
+    
+    /**
+     * Update booking status (alias for updateRentalStatus)
+     */
+    public function updateBookingStatus($bookingId, $status, $notes = null) {
+        return $this->updateRentalStatus($bookingId, $status, $notes);
+    }
+    
+    /**
+     * Delete booking
+     */
+    public function deleteBooking($bookingId) {
+        try {
+            $this->db->beginTransaction();
+            
+            // Get rental details
+            $rental = $this->getRentalById($bookingId);
+            if (!$rental) {
+                $this->db->rollBack();
+                return false;
+            }
+            
+            // Only delete bookings that are not active
+            if (in_array($rental['status'], ['active'])) {
+                $this->db->rollBack();
+                return false;
+            }
+            
+            // Delete rental
+            $this->db->query("DELETE FROM rentals WHERE id = :id");
+            $this->db->bind(':id', $bookingId);
+            
+            if ($this->db->execute()) {
+                // Update car status if rental was confirmed but not active
+                if (in_array($rental['status'], ['pending', 'confirmed'])) {
+                    $this->db->query("UPDATE cars SET status = 'available' WHERE id = :car_id");
+                    $this->db->bind(':car_id', $rental['car_id']);
+                    $this->db->execute();
+                }
+                
+                $this->db->commit();
+                return true;
+            } else {
+                $this->db->rollBack();
+                return false;
+            }
+        } catch (Exception $e) {
+            $this->db->rollBack();
+            error_log("Delete booking error: " . $e->getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Get bookings with filters (admin)
+     */
+    public function getBookingsWithFilters($search = '', $status = '', $carId = 0, $userId = 0, $startDate = '', $endDate = '', $limit = 20, $offset = 0) {
+        $sql = "SELECT r.*, u.name as user_name, u.email as user_email,
+                        c.make as car_make, c.model as car_model, c.license_plate as car_license_plate
+                 FROM rentals r
+                 JOIN users u ON r.user_id = u.id
+                 JOIN cars c ON r.car_id = c.id
+                 WHERE 1=1";
+        $params = [];
+        
+        if (!empty($search)) {
+            $sql .= " AND (r.id LIKE :search OR u.name LIKE :search OR u.email LIKE :search OR c.make LIKE :search OR c.model LIKE :search)";
+            $params[':search'] = '%' . $search . '%';
+        }
+        
+        if (!empty($status)) {
+            $sql .= " AND r.status = :status";
+            $params[':status'] = $status;
+        }
+        
+        if ($carId > 0) {
+            $sql .= " AND r.car_id = :car_id";
+            $params[':car_id'] = $carId;
+        }
+        
+        if ($userId > 0) {
+            $sql .= " AND r.user_id = :user_id";
+            $params[':user_id'] = $userId;
+        }
+        
+        if (!empty($startDate)) {
+            $sql .= " AND r.start_date >= :start_date";
+            $params[':start_date'] = $startDate;
+        }
+        
+        if (!empty($endDate)) {
+            $sql .= " AND r.end_date <= :end_date";
+            $params[':end_date'] = $endDate;
+        }
+        
+        $sql .= " ORDER BY r.created_at DESC LIMIT :limit OFFSET :offset";
+        
+        $this->db->query($sql);
+        
+        foreach ($params as $key => $value) {
+            $this->db->bind($key, $value);
+        }
+        
+        $this->db->bind(':limit', $limit, PDO::PARAM_INT);
+        $this->db->bind(':offset', $offset, PDO::PARAM_INT);
+        
+        return $this->db->resultSet();
+    }
+    
+    /**
+     * Count bookings with filters
+     */
+    public function countBookingsWithFilters($search = '', $status = '', $carId = 0, $userId = 0, $startDate = '', $endDate = '') {
+        $sql = "SELECT COUNT(*) as count
+                 FROM rentals r
+                 JOIN users u ON r.user_id = u.id
+                 JOIN cars c ON r.car_id = c.id
+                 WHERE 1=1";
+        $params = [];
+        
+        if (!empty($search)) {
+            $sql .= " AND (r.id LIKE :search OR u.name LIKE :search OR u.email LIKE :search OR c.make LIKE :search OR c.model LIKE :search)";
+            $params[':search'] = '%' . $search . '%';
+        }
+        
+        if (!empty($status)) {
+            $sql .= " AND r.status = :status";
+            $params[':status'] = $status;
+        }
+        
+        if ($carId > 0) {
+            $sql .= " AND r.car_id = :car_id";
+            $params[':car_id'] = $carId;
+        }
+        
+        if ($userId > 0) {
+            $sql .= " AND r.user_id = :user_id";
+            $params[':user_id'] = $userId;
+        }
+        
+        if (!empty($startDate)) {
+            $sql .= " AND r.start_date >= :start_date";
+            $params[':start_date'] = $startDate;
+        }
+        
+        if (!empty($endDate)) {
+            $sql .= " AND r.end_date <= :end_date";
+            $params[':end_date'] = $endDate;
+        }
+        
+        $this->db->query($sql);
+        
+        foreach ($params as $key => $value) {
+            $this->db->bind($key, $value);
+        }
+        
+        $result = $this->db->single();
+        return $result['count'] ?? 0;
+    }
+    
+    /**
+     * Get booking statistics for admin dashboard
+     */
+    public function getBookingStatistics() {
+        $stats = [];
+        
+        // Total bookings
+        $this->db->query("SELECT COUNT(*) as count FROM rentals");
+        $result = $this->db->single();
+        $stats['total_bookings'] = $result['count'] ?? 0;
+        
+        // Pending bookings
+        $this->db->query("SELECT COUNT(*) as count FROM rentals WHERE status = 'pending'");
+        $result = $this->db->single();
+        $stats['pending_bookings'] = $result['count'] ?? 0;
+        
+        // Confirmed bookings
+        $this->db->query("SELECT COUNT(*) as count FROM rentals WHERE status = 'confirmed'");
+        $result = $this->db->single();
+        $stats['confirmed_bookings'] = $result['count'] ?? 0;
+        
+        // Today's bookings
+        $this->db->query("SELECT COUNT(*) as count FROM rentals WHERE DATE(start_date) = CURDATE()");
+        $result = $this->db->single();
+        $stats['today_bookings'] = $result['count'] ?? 0;
+        
+        return $stats;
+    }
 }

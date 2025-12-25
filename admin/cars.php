@@ -125,34 +125,7 @@ $page_title = 'Manage Cars';
                 <span class="text-xl font-bold text-gray-900">Admin Panel</span>
             </div>
             
-            <nav class="mt-6 px-3">
-                <div class="space-y-1">
-                    <a href="index.php" class="sidebar-link text-gray-700 hover:bg-gray-100">
-                        <i class="fas fa-dashboard mr-3"></i>
-                        Dashboard
-                    </a>
-                    <a href="cars.php" class="sidebar-link active">
-                        <i class="fas fa-car mr-3"></i>
-                        Cars
-                    </a>
-                    <a href="users.php" class="sidebar-link text-gray-700 hover:bg-gray-100">
-                        <i class="fas fa-users mr-3"></i>
-                        Users
-                    </a>
-                    <a href="rentals.php" class="sidebar-link text-gray-700 hover:bg-gray-100">
-                        <i class="fas fa-calendar-check mr-3"></i>
-                        Rentals
-                    </a>
-                    <a href="../views/index.php" class="sidebar-link text-gray-600">
-                        <i class="fas fa-home mr-3"></i>
-                        Visit Site
-                    </a>
-                    <a href="../views/logout.php" class="sidebar-link text-red-600 hover:bg-red-50">
-                        <i class="fas fa-sign-out-alt mr-3"></i>
-                        Logout
-                    </a>
-                </div>
-            </nav>
+            <?php require_once __DIR__ . '/aside.php';?>
         </aside>
         
         <!-- Main Content -->
