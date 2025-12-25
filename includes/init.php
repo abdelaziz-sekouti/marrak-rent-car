@@ -130,10 +130,12 @@ function requireAdmin() {
 }
 
 // Apply sanitization to all request data
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $_POST = sanitizeInput($_POST);
-    $_FILES = sanitizeInput($_FILES);
-} elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
-    $_GET = sanitizeInput($_GET);
+if (isset($_SERVER['REQUEST_METHOD'])) {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $_POST = sanitizeInput($_POST);
+        $_FILES = sanitizeInput($_FILES);
+    } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $_GET = sanitizeInput($_GET);
+    }
 }
 ?>

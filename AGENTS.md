@@ -3,39 +3,30 @@
 This file contains guidelines and commands for agentic coding agents working in the marrak-rent-car repository.
 
 ## Project Stack
-- **Backend**: PHP 8.x with MySQL
+- **Backend**: PHP 8.x with MySQL (Vanilla PHP, no Composer)
 - **Frontend**: JavaScript (ES6+), HTML5, CSS3
 - **Styling**: TailwindCSS
-- **Build Tools**: Composer (PHP), npm (JS)
+- **Build Tools**: npm (JS only), Manual PHP testing
 
 ## Build/Test/Lint Commands
 
 ### PHP Commands
 ```bash
-# Install PHP dependencies
-composer install
-
-# Update dependencies
-composer update
-
-# Run PHP linter
-composer run lint
-# or
+# Check PHP syntax for specific file
 php -l path/to/file.php
 
-# Run PHP tests
-composer test
-# or
-php vendor/bin/phpunit
+# Run PHP built-in web server for testing
+php -S localhost:8000
 
-# Run specific test
-php vendor/bin/phpunit tests/SpecificTest.php
+# Run PHP syntax check on all PHP files in directory
+find . -name "*.php" -exec php -l {} \;
 
-# Check code style (PHP_CodeSniffer)
-composer run phpcs
+# Run migration script
+php migrate.php
 
-# Fix code style automatically
-composer run phpcbf
+# Run specific test files manually
+php test-car.php
+php test.php
 ```
 
 ### JavaScript Commands
@@ -85,17 +76,13 @@ npm run watch:css
 #### PHP Import Structure
 ```php
 <?php
-// 1. External libraries
-require_once 'vendor/autoload.php';
+// 1. Application initialization
+require_once __DIR__ . '/../includes/init.php';
 
-// 2. Application config
-require_once 'config/database.php';
-require_once 'config/app.php';
-
-// 3. Application classes
-require_once 'models/Car.php';
-require_once 'models/User.php';
-require_once 'services/CarRentalService.php';
+// 2. Model imports
+require_once __DIR__ . '/../models/Car.php';
+require_once __DIR__ . '/../models/User.php';
+require_once __DIR__ . '/../models/Rental.php';
 ```
 
 #### PHP Error Handling
@@ -123,17 +110,19 @@ try {
 
 #### JavaScript Import Structure
 ```javascript
-// 1. External libraries
+// 1. External libraries (loaded via script tags or npm)
 import axios from 'axios';
-import { useState, useEffect } from 'react';
 
-// 2. Internal utilities
-import { formatDate } from './utils/dateHelpers';
-import { validateEmail } from './utils/validation';
+// 2. DOM Ready and initialization
+document.addEventListener('DOMContentLoaded', function() {
+    initMobileMenu();
+    initFormValidations();
+    initCarSearch();
+});
 
-// 3. Components
-import CarCard from './components/CarCard';
-import RentalForm from './components/RentalForm';
+// 3. Function definitions (no imports, vanilla JS)
+function initMobileMenu() { /* ... */ }
+function validateForm(form) { /* ... */ }
 ```
 
 #### JavaScript Error Handling
@@ -181,6 +170,27 @@ async function rentCar(userId, carId) {
 - **Foreign Keys**: `{table}_id` (e.g., `user_id`, `car_id`)
 - **Timestamps**: `created_at`, `updated_at`
 
+#### Database Class Pattern
+```php
+// Use custom Database wrapper class
+public function __construct() {
+    $this->db = new Database();
+}
+
+// Query pattern with prepared statements
+public function getCarById($id) {
+    $this->db->query("SELECT * FROM cars WHERE id = :id");
+    $this->db->bind(':id', $id);
+    return $this->db->single();
+}
+
+// Multiple parameter binding
+foreach ($params as $key => $value) {
+    $this->db->bind($key, $value);
+}
+return $this->db->resultSet();
+```
+
 ## API Conventions
 - **RESTful URLs**: Use resource-based URLs (e.g., `/api/cars`, `/api/users`)
 - **HTTP Methods**: GET (read), POST (create), PUT/PATCH (update), DELETE (delete)
@@ -203,22 +213,23 @@ async function rentCar(userId, carId) {
 ## File Organization
 ```
 marrak-rent-car/
-├── config/           # Configuration files
+├── admin/            # Admin panel pages
+│   ├── index.php     # Admin dashboard
+│   ├── cars.php      # Car management
+│   └── rentals.php   # Rental management
+├── database/         # Database migration scripts
+├── includes/         # PHP includes (config, database, helpers)
+├── public/           # Web root and assets
+│   ├── css/          # Compiled CSS files
+│   └── js/           # JavaScript files
 ├── src/              # PHP source code
-│   ├── controllers/  # HTTP controllers
-│   ├── models/       # Database models
-│   ├── services/     # Business logic
-│   └── middleware/   # Request middleware
-├── public/           # Web root
-│   ├── assets/       # CSS, JS, images
-│   └── index.php     # Front controller
-├── resources/        # Views, templates
-├── tests/            # Test files
-├── node_modules/     # Node.js dependencies
-├── vendor/           # Composer dependencies
-├── composer.json     # PHP dependencies
+│   └── models/       # Database models
+├── views/            # Frontend view templates
+├── index.php         # Main entry point
+├── migrate.php       # Database migration runner
 ├── package.json      # Node.js dependencies
-└── tailwind.config.js # TailwindCSS configuration
+├── tailwind.config.js # TailwindCSS configuration
+└── postcss.config.js # PostCSS configuration
 ```
 
 ## Testing Guidelines
