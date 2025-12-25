@@ -1,7 +1,7 @@
 </main>
     
     <!-- Footer -->
-    <footer class="bg-secondary-800 text-white mt-12">
+    <footer class="bg-blue-600 text-white mt-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
             <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
                 <!-- Company Info -->
@@ -68,7 +68,7 @@
             
             <!-- Copyright -->
             <div class="border-t border-secondary-700 mt-8 pt-8 text-center text-gray-400">
-                <p>&copy; <?php echo date('Y'); ?> Marrak Rent Car. All rights reserved.</p>
+                <p>&copy; <?php echo date('Y'); ?> Marrak Rent Car Made By Sekouti. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -77,14 +77,8 @@
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
     <script src="<?php echo BASE_URL; ?>/public/js/main.js"></script>
     
-    <!-- Mobile menu toggle -->
+    <!-- Ensure BASE_URL is available for JavaScript -->
     <script>
-        document.getElementById('mobile-menu-button')?.addEventListener('click', function() {
-            const menu = document.getElementById('mobile-menu');
-            menu.classList.toggle('hidden');
-        });
-        
-        // Ensure BASE_URL is available for JavaScript
         const BASE_URL = '<?php echo BASE_URL; ?>';
     </script>
 </body>

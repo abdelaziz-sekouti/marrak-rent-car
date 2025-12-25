@@ -139,7 +139,7 @@ function sendContactEmail($data) {
     <body>
         <div class='container'>
             <div class='header'>
-                <h2>New Contact Form Submission</h2>
+                <h2 class='text-blue-400'>New Contact Form Submission</h2>
             </div>
             <div class='content'>
                 <div class='field'>
@@ -190,15 +190,18 @@ function sendContactEmail($data) {
 }
 ?>
 
-<?php require_once '../includes/header.php'; ?>
+<?php 
+require_once '../includes/init.php';
+require_once '../includes/header.php'; 
+?>
 
 <main class="flex-grow">
     <!-- Hero Section -->
-    <section class="hero-gradient text-white py-16">
+    <section class="bg-linear-to-bl from-purple-500 to-pink-500 text-white py-16">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
-                <h1 class="text-4xl md:text-5xl font-bold mb-4 animate-fade-in">Contact Us</h1>
-                <p class="text-xl mb-8 max-w-2xl mx-auto animate-slide-up">
+                <h1 class="text-blue-400 text-4xl md:text-5xl font-bold mb-4 animate-fade-in">Contact Us</h1>
+                <p class="text-blue-300 text-xl mb-8 max-w-2xl mx-auto animate-slide-up">
                     Have questions? We'd love to hear from you. Get in touch and we'll respond as soon as possible.
                 </p>
             </div>
@@ -208,12 +211,12 @@ function sendContactEmail($data) {
     <!-- Contact Section -->
     <section class="py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 p-2">
                 <!-- Contact Form -->
                 <div class="scroll-animate">
-                    <div class="card shadow-lg">
+                    <div class="card shadow-lg p-2">
                         <div class="card-header">
-                            <h2 class="text-2xl font-bold text-gray-900">Send us a Message</h2>
+                            <h2 class="text-2xl font-bold text-gray-900 text-center">Send us a Message</h2>
                             <p class="text-gray-600 mt-2">Fill out the form below and we'll get back to you</p>
                         </div>
                         <div class="card-body">
@@ -458,6 +461,7 @@ function sendContactEmail($data) {
         </div>
     </section>
 </main>
+<?php require_once __DIR__.'/../includes/footer.php'; ?>
 
 <script>
 // Character counter for message field
@@ -475,85 +479,233 @@ document.getElementById('message')?.addEventListener('input', function(e) {
     }
 });
 
-// Initialize Google Maps
+// Initialize Google Maps with fallback
 function initMap() {
-    // Marrak Rent Car location (example coordinates)
-    const marrakLocation = { lat: 40.7128, lng: -74.0060 }; // New York City coordinates
-    
-    const map = new google.maps.Map(document.getElementById('map'), {
-        zoom: 15,
-        center: marrakLocation,
-        styles: [
-            {
-                featureType: 'water',
-                elementType: 'geometry',
-                stylers: [{ color: '#e9e9e9' }, { lightness: 17 }]
-            },
-            {
-                featureType: 'landscape',
-                elementType: 'geometry',
-                stylers: [{ color: '#f5f5f5' }, { lightness: 20 }]
-            }
-        ]
-    });
-    
-    // Custom marker
-    const markerContent = `
-        <div style="
-            background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 20px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-        ">
-            <i class="fas fa-car"></i>
-        </div>
-    `;
-    
-    const marker = new google.maps.Marker({
-        position: marrakLocation,
-        map: map,
-        title: 'Marrak Rent Car',
-        icon: {
-            url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(markerContent),
-            scaledSize: new google.maps.Size(40, 40)
-        }
-    });
-    
-    // Info window
-    const infoWindow = new google.maps.InfoWindow({
-        content: `
-            <div style="padding: 10px; max-width: 250px;">
-                <h3 style="margin: 0 0 10px 0; color: #1f2937; font-size: 18px;">Marrak Rent Car</h3>
-                <p style="margin: 5px 0; color: #6b7280;">123 Rental Street<br>City, State 12345</p>
-                <p style="margin: 5px 0; color: #6b7280;">Phone: +1 (555) 123-4567</p>
-                <p style="margin: 5px 0; color: #6b7280;">Hours: Mon-Fri 8AM-8PM</p>
-                <a href="#" style="color: #3b82f6; text-decoration: none;">Get Directions →</a>
+    try {
+        // Marrak Rent Car location - Derb Bouaalam, N185, Marrakech, Morocco
+        const marrakLocation = { lat: 31.6295, lng: -7.9811 };
+        
+        const map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 15,
+            center: marrakLocation,
+            styles: [
+                {
+                    featureType: 'water',
+                    elementType: 'geometry',
+                    stylers: [{ color: '#e9e9e9' }, { lightness: 17 }]
+                },
+                {
+                    featureType: 'landscape',
+                    elementType: 'geometry',
+                    stylers: [{ color: '#f5f5f5' }, { lightness: 20 }]
+                }
+            ]
+        });
+        
+        // Custom marker
+        const markerContent = `
+            <div style="
+                background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: white;
+                font-size: 20px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            ">
+                <i class="fas fa-car"></i>
             </div>
-        `
-    });
-    
-    marker.addListener('click', () => {
-        infoWindow.open(map, marker);
-    });
+        `;
+        
+        const marker = new google.maps.Marker({
+            position: marrakLocation,
+            map: map,
+            title: 'Marrak Rent Car',
+            icon: {
+                url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(markerContent),
+                scaledSize: new google.maps.Size(40, 40)
+            }
+        });
+        
+        // Info window
+        const infoWindow = new google.maps.InfoWindow({
+            content: `
+                <div style="padding: 10px; max-width: 250px;">
+                    <h3 style="margin: 0 0 10px 0; color: #1f2937; font-size: 18px;">Marrak Rent Car</h3>
+                    <p style="margin: 5px 0; color: #6b7280;">Derb Bouaalam, N185<br>Marrakech, Morocco</p>
+                    <p style="margin: 5px 0; color: #6b7280;">Phone: +212 5XX-XXX-XXX</p>
+                    <p style="margin: 5px 0; color: #6b7280;">Hours: Mon-Sat 8AM-8PM</p>
+                    <a href="https://maps.google.com/?q=Derb+Bouaalam+N185+Marrakech+Morocco" 
+                       target="_blank" 
+                       style="color: #3b82f6; text-decoration: none;">Get Directions →</a>
+                </div>
+            `
+        });
+        
+        marker.addListener('click', () => {
+            infoWindow.open(map, marker);
+        });
+    } catch (error) {
+        console.error('Google Maps initialization failed:', error);
+        showMapFallback();
+    }
 }
 
-// Load Google Maps API
+// Show fallback map if Google Maps fails
+function showMapFallback() {
+    const mapElement = document.getElementById('map');
+    if (mapElement) {
+        mapElement.innerHTML = `
+            <div class="bg-gradient-to-br from-blue-50 to-indigo-100 border-2 border-blue-200 rounded-lg p-8 text-center h-full flex flex-col justify-center">
+                <i class="fas fa-map-marked-alt text-6xl text-blue-600 mb-4"></i>
+                <h3 class="text-xl font-bold text-blue-800 mb-2">Marrak Rent Car Location</h3>
+                <p class="text-blue-700 mb-2">
+                    <i class="fas fa-map-marker-alt mr-2"></i>Derb Bouaalam, N185
+                </p>
+                <p class="text-blue-700 mb-4">Marrakech, Morocco</p>
+                <p class="text-blue-600 text-sm mb-4">
+                    <i class="fas fa-phone mr-2"></i>+212 5XX-XXX-XXX
+                </p>
+                <div class="space-x-3">
+                    <a href="https://maps.google.com/?q=Derb+Bouaalam+N185+Marrakech+Morocco" 
+                       target="_blank" 
+                       class="inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors shadow-lg">
+                        <i class="fas fa-directions mr-2"></i>Get Directions
+                    </a>
+                    <a href="tel:+2125XXXXXXXX" 
+                       class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg hover:bg-green-700 transition-colors shadow-lg">
+                        <i class="fas fa-phone mr-2"></i>Call Now
+                    </a>
+                </div>
+                <p class="text-blue-500 text-xs mt-4">
+                    <i class="fas fa-info-circle mr-1"></i>Click to open in Google Maps
+                </p>
+            </div>
+        `;
+    }
+}
+
+// Load Google Maps API with better error handling
 function loadGoogleMaps() {
+    // Check if we have a valid API key
+    const apiKey = '<?php echo defined('GOOGLE_MAPS_API_KEY') ? GOOGLE_MAPS_API_KEY : ''; ?>';
+    
+    if (!apiKey || apiKey === 'AIzaSyBF1nE8q7hKz7jX9e3mRf8Lq2vC6W3nG9Y') {
+        // Use OpenStreetMap as fallback if no valid API key
+        console.log('No valid Google Maps API key found, using OpenStreetMap');
+        loadOpenStreetMap();
+        return;
+    }
+    
     const script = document.createElement('script');
-    script.src = 'https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap';
+    script.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&callback=initMap&v=weekly`;
     script.async = true;
     script.defer = true;
+    
+    script.onload = function() {
+        console.log('Google Maps loaded successfully');
+    };
+    
+    script.onerror = function() {
+        console.error('Failed to load Google Maps API, trying OpenStreetMap');
+        loadOpenStreetMap();
+    };
+    
+    // Set timeout for map loading
+    setTimeout(() => {
+        if (typeof google === 'undefined') {
+            console.warn('Google Maps loading timeout, trying OpenStreetMap');
+            loadOpenStreetMap();
+        }
+    }, 10000); // 10 seconds timeout
+    
     document.head.appendChild(script);
+}
+
+// Load OpenStreetMap as fallback (no API key required)
+function loadOpenStreetMap() {
+    // Load Leaflet CSS and JS
+    const leafletCSS = document.createElement('link');
+    leafletCSS.rel = 'stylesheet';
+    leafletCSS.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(leafletCSS);
+    
+    const leafletJS = document.createElement('script');
+    leafletJS.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    leafletJS.onload = function() {
+        initOpenStreetMap();
+    };
+    document.head.appendChild(leafletJS);
+}
+
+// Initialize OpenStreetMap with Leaflet
+function initOpenStreetMap() {
+    try {
+        const mapElement = document.getElementById('map');
+        if (!mapElement) return;
+        
+        // Marrak Rent Car location - Derb Bouaalam, N185, Marrakech, Morocco
+        const marrakLocation = [31.6295, -7.9811];
+        
+        // Create map
+        const map = L.map('map').setView(marrakLocation, 15);
+        
+        // Add tile layer
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        
+        // Create custom icon
+        const carIcon = L.divIcon({
+            html: `
+                <div style="
+                    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+                    border-radius: 50%;
+                    width: 40px;
+                    height: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-size: 20px;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+                    border: 3px solid white;
+                ">
+                    <i class="fas fa-car"></i>
+                </div>
+            `,
+            className: 'custom-marker',
+            iconSize: [40, 40],
+            iconAnchor: [20, 20],
+            popupAnchor: [0, -20]
+        });
+        
+        // Add marker
+        const marker = L.marker(marrakLocation, { icon: carIcon }).addTo(map);
+        
+        // Add popup
+        marker.bindPopup(`
+            <div style="padding: 10px; max-width: 250px;">
+                <h3 style="margin: 0 0 10px 0; color: #1f2937; font-size: 18px;">Marrak Rent Car</h3>
+                <p style="margin: 5px 0; color: #6b7280;">Derb Bouaalam, N185<br>Marrakech, Morocco</p>
+                <p style="margin: 5px 0; color: #6b7280;">Phone: +212 5XX-XXX-XXX</p>
+                <p style="margin: 5px 0; color: #6b7280;">Hours: Mon-Sat 8AM-8PM</p>
+                <a href="https://maps.google.com/?q=Derb+Bouaalam+N185+Marrakech+Morocco" 
+                   target="_blank" 
+                   style="color: #3b82f6; text-decoration: none; display: inline-block; margin-top: 10px;">Get Directions →</a>
+            </div>
+        `).openPopup();
+        
+        console.log('OpenStreetMap loaded successfully');
+    } catch (error) {
+        console.error('OpenStreetMap initialization failed:', error);
+        showMapFallback();
+    }
 }
 
 // Initialize maps when page loads
 window.addEventListener('load', loadGoogleMaps);
 </script>
-
-<?php require_once '../includes/footer.php'; ?>

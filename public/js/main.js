@@ -25,14 +25,49 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Mobile menu functionality
 function initMobileMenu() {
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenuButton = document.querySelector('.mobile-menu-button');
     const mobileMenu = document.getElementById('mobile-menu');
     
     if (mobileMenuButton && mobileMenu) {
-        mobileMenuButton.addEventListener('click', function() {
-            mobileMenu.classList.toggle('hidden');
+        mobileMenuButton.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const isHidden = mobileMenu.classList.contains('hidden');
+            
+            if (isHidden) {
+                mobileMenu.classList.remove('hidden');
+                mobileMenu.classList.add('block');
+                // Change button to close icon
+                const icon = mobileMenuButton.querySelector('i');
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+                mobileMenuButton.setAttribute('aria-expanded', 'true');
+            } else {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('block');
+                // Change button back to menu icon
+                const icon = mobileMenuButton.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+                mobileMenuButton.setAttribute('aria-expanded', 'false');
+            }
         });
     }
+    
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(event) {
+        if (mobileMenu && !mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
+            if (!mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                mobileMenu.classList.remove('block');
+                const icon = mobileMenuButton.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+                mobileMenuButton.setAttribute('aria-expanded', 'false');
+            }
+        }
+    });
 }
 
 // Form validation

@@ -1,9 +1,12 @@
-<?php require_once '../includes/init.php'; ?>
-<?php require_once '../includes/header.php'; ?>
+<?php 
+// Redirect to About page
+header('Location: http://localhost/marrak-rent-car/views/about.php');
+exit();
+?>
 
 <main class="flex-grow">
     <!-- Hero Section -->
-    <section class="hero-gradient text-white py-20 relative overflow-hidden hero-background">
+    <section class=" bg-linear-to-bl from-violet-500 to-fuchsia-500 text-white py-20 relative overflow-hidden hero-background">
         <!-- Animated background elements -->
         <div class="absolute inset-0">
             <div class="absolute top-10 left-10 w-32 h-32 bg-white opacity-5 rounded-full animate-float"></div>
