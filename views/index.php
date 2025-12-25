@@ -1,7 +1,6 @@
 <?php 
-// Redirect to About page
-header('Location: http://localhost/marrak-rent-car/views/about.php');
-exit();
+// Load header and navigation
+require_once '../includes/header.php';
 ?>
 
 <main class="flex-grow">
@@ -31,11 +30,11 @@ exit();
                     </div>
                     <div class="hero-buttons">
                         <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                            <a href="<?php echo BASE_URL; ?>/views/cars.php" class="btn bg-white text-primary-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold hover-lift">
+                            <a href="<?php echo BASE_URL; ?>/views/cars.php" class="btn bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 text-lg font-semibold hover-lift">
                                 <i class="fas fa-search mr-2"></i>
                                 Browse Cars
                             </a>
-                            <a href="<?php echo BASE_URL; ?>/views/register.php" class="btn btn-outline border-white text-white hover:bg-white hover:text-primary-600 px-8 py-4 text-lg font-semibold hover-lift">
+                            <a href="<?php echo BASE_URL; ?>/views/register.php" class="btn  bg-indigo-500 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-4 text-lg font-semibold hover-lift">
                                 <i class="fas fa-user-plus mr-2"></i>
                                 Sign Up
                             </a>
