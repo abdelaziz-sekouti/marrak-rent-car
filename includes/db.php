@@ -108,6 +108,24 @@ class Database {
     }
     
     /**
+     * Simple query execution
+     * @param string $sql
+     * @param array $params
+     * @return PDOStatement|false
+     */
+    public function executeQuery($sql, $params = []) {
+        try {
+            $stmt = $this->pdo->prepare($sql);
+            if ($stmt->execute($params)) {
+                return $stmt;
+            }
+        } catch (PDOException $e) {
+            error_log("Database query error: " . $e->getMessage());
+        }
+        return false;
+    }
+    
+    /**
      * Get PDO instance
      * @return PDO
      */

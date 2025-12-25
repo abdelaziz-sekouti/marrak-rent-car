@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/../includes/init.php';
+require_once __DIR__ . '/../../includes/init.php';
 
 class Rental {
     public $db;

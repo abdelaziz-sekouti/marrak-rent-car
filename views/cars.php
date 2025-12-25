@@ -31,7 +31,8 @@ $page_description = 'Browse our wide selection of rental cars with competitive p
 
 <main class="flex-grow">
     <!-- Hero Section -->
-    <section class="bg-gradient-to-r from-primary-600 to-primary-700 text-white py-12">
+     
+    <section class="bg-linear-to-bl from-blue-600 to-blue-700  text-white py-12">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center">
                 <h1 class="text-4xl font-bold mb-4 animate-fade-in">Our Fleet</h1>
@@ -133,10 +134,10 @@ $page_description = 'Browse our wide selection of rental cars with competitive p
             
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="carsGrid">
                 <?php foreach ($cars as $car): ?>
-                    <div class="card hover:shadow-xl transition-all duration-300 scroll-animate">
+                    <div class="card  p-2  hover:shadow-xl transition-all duration-300 scroll-animate">
                         <!-- Car Image -->
                         <div class="relative h-48 bg-gradient-to-br from-primary-100 to-secondary-100 overflow-hidden">
-                            <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="absolute inset-0 flex items-center justify-center ">
                                 <i class="fas fa-car-side text-6xl text-primary-300"></i>
                             </div>
                             
@@ -203,12 +204,14 @@ $page_description = 'Browse our wide selection of rental cars with competitive p
                                 </div>
                                 <div class="flex space-x-2">
                                     <button onclick="viewCarDetails(<?php echo $car['id']; ?>)" 
-                                            class="btn btn-outline text-sm">
+                                            class="btn btn-outline bg-indigo-900 text-sm  text-amber-200 rounded-xl p-2 cursor-pointer hover:bg-indigo-300 hover:text-amber-600 transition-all">
                                         <i class="fas fa-eye mr-1"></i>
                                         View
                                     </button>
                                     <button onclick="bookCar(<?php echo $car['id']; ?>)" 
-                                            class="btn btn-primary text-sm <?php echo $car['status'] !== 'available' ? 'opacity-50 cursor-not-allowed' : ''; ?>"
+                                            class="btn btn-primary text-sm 
+                                            bg-green-700
+                                            text-amber-200 rounded-xl p-2 cursor-pointer hover:bg-green-300 hover:text-amber-600 transition-all <?php echo $car['status'] !== 'available' ? 'opacity-50 cursor-not-allowed' : ''; ?>"
                                             <?php echo $car['status'] !== 'available' ? 'disabled' : ''; ?>>
                                         <i class="fas fa-calendar-check mr-1"></i>
                                         Book

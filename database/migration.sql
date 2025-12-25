@@ -48,11 +48,35 @@ CREATE TABLE cars (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     
-    INDEX idx_status (status),
+INDEX idx_status (status),
     INDEX idx_category (category),
     INDEX idx_make_model (make, model),
     INDEX idx_license_plate (license_plate)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Create rentals table
+CREATE TABLE rentals (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT NOT NULL,
+    car_id INT NOT NULL,
+    start_date DATE NOT NULL,
+    end_date DATE NOT NULL,
+    total_cost DECIMAL(10, 2) NOT NULL,
+    status ENUM('pending', 'confirmed', 'active', 'completed', 'cancelled') DEFAULT 'pending',
+    pickup_location VARCHAR(255),
+    dropoff_location VARCHAR(255),
+    special_requests TEXT,
+    payment_status ENUM('pending', 'paid', 'refunded') DEFAULT 'pending',
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (car_id) REFERENCES cars(id) ON DELETE CASCADE,
+    INDEX idx_user_id (user_id),
+    INDEX idx_car_id (car_id),
+    INDEX idx_status (status),
+    INDEX idx_dates (start_date, end_date)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Re-enable foreign key checks
 SET FOREIGN_KEY_CHECKS = 1;
@@ -69,3 +93,10 @@ INSERT INTO cars (make, model, year, license_plate, category, daily_rate, status
 ('Ford', 'Mustang', 2022, 'GHI789', 'sports', 85.00, 'available', 8000, 'Red', 'gasoline', 'manual', 4, 'Powerful sports car with thrilling performance'),
 ('Tesla', 'Model 3', 2023, 'JKL012', 'luxury', 95.00, 'available', 5000, 'White', 'electric', 'automatic', 5, 'Premium electric sedan with autopilot'),
 ('Chevrolet', 'Tahoe', 2023, 'MNO345', 'suv', 75.00, 'available', 10000, 'Black', 'gasoline', 'automatic', 8, 'Spacious SUV perfect for families');
+
+INSERT INTO rentals (user_id, car_id, start_date, end_date, total_cost, status, pickup_location, dropoff_location, payment_status) VALUES
+(2, 1, '2024-01-15', '2024-01-18', 135.00, 'completed', 'Airport', 'Airport', 'paid'),
+(3, 2, '2024-01-20', '2024-01-22', 70.00, 'active', 'Downtown', 'Downtown', 'paid'),
+(2, 3, '2024-01-25', '2024-01-27', 170.00, 'confirmed', 'Hotel', 'Airport', 'pending'),
+(3, 4, '2024-02-01', '2024-02-03', 190.00, 'pending', 'Airport', 'Downtown', 'pending'),
+(2, 5, '2024-02-05', '2024-02-08', 225.00, 'cancelled', 'Downtown', 'Hotel', 'refunded');

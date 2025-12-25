@@ -14,46 +14,57 @@ $userModel = new User();
 $rentalModel = new Rental();
 
 // Statistics
-$totalCars = $carModel->db->query("SELECT COUNT(*) as count FROM cars")->single()['count'];
-$availableCars = $carModel->db->query("SELECT COUNT(*) as count FROM cars WHERE status = 'available'")->single()['count'];
-$totalUsers = $userModel->db->query("SELECT COUNT(*) as count FROM users")->single()['count'];
-$totalRentals = $rentalModel->db->query("SELECT COUNT(*) as count FROM rentals")->single()['count'];
+$stmt = $carModel->db->executeQuery("SELECT COUNT(*) as count FROM cars");
+$totalCars = $stmt ? $stmt->fetch()['count'] : 0;
+
+$stmt = $carModel->db->executeQuery("SELECT COUNT(*) as count FROM cars WHERE status = 'available'");
+$availableCars = $stmt ? $stmt->fetch()['count'] : 0;
+
+$stmt = $userModel->db->executeQuery("SELECT COUNT(*) as count FROM users");
+$totalUsers = $stmt ? $stmt->fetch()['count'] : 0;
+
+$stmt = $rentalModel->db->executeQuery("SELECT COUNT(*) as count FROM rentals");
+$totalRentals = $stmt ? $stmt->fetch()['count'] : 0;
 
 // Monthly revenue (last 30 days)
-$monthlyRevenue = $rentalModel->db->query("
+$stmt = $rentalModel->db->executeQuery("
     SELECT SUM(total_cost) as revenue 
     FROM rentals 
     WHERE status = 'completed' 
     AND created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
-")->single()['revenue'] ?? 0;
+");
+$monthlyRevenue = $stmt ? $stmt->fetch()['revenue'] : 0;
 
 // Recent rentals
-$recentRentals = $rentalModel->db->query("
+$stmt = $rentalModel->db->executeQuery("
     SELECT r.*, u.name as user_name, c.make, c.model 
     FROM rentals r 
     JOIN users u ON r.user_id = u.id 
     JOIN cars c ON r.car_id = c.id 
     ORDER BY r.created_at DESC 
     LIMIT 5
-")->resultSet();
+");
+$recentRentals = $stmt ? $stmt->fetchAll() : [];
 
 // Popular cars
-$popularCars = $rentalModel->db->query("
+$stmt = $rentalModel->db->executeQuery("
     SELECT c.make, c.model, COUNT(r.id) as rental_count 
     FROM cars c 
     LEFT JOIN rentals r ON c.id = r.car_id 
     GROUP BY c.id 
     ORDER BY rental_count DESC 
     LIMIT 5
-")->resultSet();
+");
+$popularCars = $stmt ? $stmt->fetchAll() : [];
 
 // Active rentals by status
-$rentalStats = $rentalModel->db->query("
+$stmt = $rentalModel->db->executeQuery("
     SELECT status, COUNT(*) as count 
     FROM rentals 
     WHERE created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
     GROUP BY status
-")->resultSet();
+");
+$rentalStats = $stmt ? $stmt->fetchAll() : [];
 
 $page_title = 'Admin Dashboard';
 ?>
@@ -373,7 +384,7 @@ $page_title = 'Admin Dashboard';
             },
             options: {
                 responsive: true,
-                maintainAspectRatio: false,
+                maintainAspectRatio: true,
                 plugins: {
                     legend: {
                         position: 'right',
