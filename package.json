@@ -1,0 +1,29 @@
+{
+  "name": "marrak-rent-car",
+  "version": "1.0.0",
+  "description": "Car rental management system",
+  "main": "index.js",
+  "scripts": {
+    "dev": "npm run watch:css",
+    "build": "npm run build:css",
+    "build:css": "tailwindcss -i ./public/css/input.css -o ./public/css/style.css --minify",
+    "watch:css": "tailwindcss -i ./public/css/input.css -o ./public/css/style.css --watch",
+    "lint": "eslint public/js/**/*.js",
+    "lint:fix": "eslint public/js/**/*.js --fix",
+    "test": "jest"
+  },
+  "keywords": ["car", "rental", "php", "mysql", "tailwindcss"],
+  "author": "Marrak Rent Car",
+  "license": "MIT",
+  "devDependencies": {
+    "@tailwindcss/forms": "^0.5.7",
+    "autoprefixer": "^10.4.16",
+    "eslint": "^8.55.0",
+    "jest": "^29.7.0",
+    "postcss": "^8.4.32",
+    "tailwindcss": "^3.4.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.2"
+  }
+}
