@@ -1034,6 +1034,10 @@ input:where([type='file']):focus {
   visibility: visible;
 }
 
+.collapse {
+  visibility: collapse;
+}
+
 .fixed {
   position: fixed;
 }
@@ -1414,6 +1418,10 @@ input:where([type='file']):focus {
 
 .flex-grow {
   flex-grow: 1;
+}
+
+.border-collapse {
+  border-collapse: collapse;
 }
 
 .transform {
