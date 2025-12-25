@@ -208,13 +208,13 @@ $page_description = 'Browse our wide selection of rental cars with competitive p
                                         <i class="fas fa-eye mr-1"></i>
                                         View
                                     </button>
-                                    <button onclick="bookCar(<?php echo $car['id']; ?>)" 
+                                    <button onclick="showBookingModal(<?php echo $car['id']; ?>)" 
                                             class="btn btn-primary text-sm 
                                             bg-green-700
                                             text-amber-200 rounded-xl p-2 cursor-pointer hover:bg-green-300 hover:text-amber-600 transition-all <?php echo $car['status'] !== 'available' ? 'opacity-50 cursor-not-allowed' : ''; ?>"
                                             <?php echo $car['status'] !== 'available' ? 'disabled' : ''; ?>>
                                         <i class="fas fa-calendar-check mr-1"></i>
-                                        Book
+                                        Quick Book
                                     </button>
                                 </div>
                             </div>
@@ -238,15 +238,164 @@ $page_description = 'Browse our wide selection of rental cars with competitive p
         </div>
     </section>
     
+    <!-- Quick Booking Modal -->
+    <div id="quickBookingModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+        <div class="relative top-10 mx-auto p-5 border w-full max-w-2xl shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-2xl font-bold text-gray-900">Quick Booking</h3>
+                    <button onclick="closeQuickBookingModal()" class="text-gray-400 hover:text-gray-600 text-2xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <form id="quickBookingForm" method="POST" action="quick-book.php" class="space-y-4">
+                    <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
+                    <input type="hidden" name="car_id" id="modalCarId">
+                    
+                    <!-- Date Selection -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-calendar-check mr-2"></i>
+                                Pickup Date *
+                            </label>
+                            <input type="date" name="start_date" required min="<?php echo date('Y-m-d'); ?>" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-calendar-alt mr-2"></i>
+                                Return Date *
+                            </label>
+                            <input type="date" name="end_date" required min="<?php echo date('Y-m-d'); ?>" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+                        </div>
+                    </div>
+                    
+                    <!-- Time Selection -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-clock mr-2"></i>
+                                Pickup Time *
+                            </label>
+                            <select name="start_time" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+                                <option value="08:00">8:00 AM</option>
+                                <option value="09:00" selected>9:00 AM</option>
+                                <option value="10:00">10:00 AM</option>
+                                <option value="11:00">11:00 AM</option>
+                                <option value="12:00">12:00 PM</option>
+                                <option value="13:00">1:00 PM</option>
+                                <option value="14:00">2:00 PM</option>
+                                <option value="15:00">3:00 PM</option>
+                                <option value="16:00">4:00 PM</option>
+                                <option value="17:00" selected>5:00 PM</option>
+                                <option value="18:00">6:00 PM</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-clock mr-2"></i>
+                                Return Time *
+                            </label>
+                            <select name="end_time" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+                                <option value="16:00">4:00 PM</option>
+                                <option value="17:00" selected>5:00 PM</option>
+                                <option value="18:00">6:00 PM</option>
+                                <option value="19:00">7:00 PM</option>
+                                <option value="20:00">8:00 PM</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <!-- Location Selection -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-map-marker-alt mr-2"></i>
+                                Pickup Location *
+                            </label>
+                            <input type="text" name="pickup_location" required 
+                                   placeholder="Enter pickup address or location" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                <i class="fas fa-flag-checkered mr-2"></i>
+                                Drop-off Location *
+                            </label>
+                            <input type="text" name="dropoff_location" required 
+                                   placeholder="Enter drop-off address or location" 
+                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500">
+                        </div>
+                    </div>
+                    
+                    <!-- Special Requests -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">
+                            <i class="fas fa-sticky-note mr-2"></i>
+                            Special Requests
+                        </label>
+                        <textarea name="notes" rows="3" 
+                                  placeholder="Any special requirements or requests..." 
+                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500"></textarea>
+                    </div>
+                    
+                    <!-- Cost Display -->
+                    <div class="bg-gray-50 rounded-lg p-4">
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-gray-600">Estimated Cost:</span>
+                                <span class="text-2xl font-bold text-primary-600 ml-2" id="estimatedCost">$0.00</span>
+                            </div>
+                            <div class="text-sm text-gray-500">
+                                Calculated automatically based on rental duration
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Submit Button -->
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" onclick="closeQuickBookingModal()" class="btn btn-secondary">
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-check-circle mr-2"></i>
+                            Confirm Booking
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <!-- Car Details Modal -->
     <div id="carModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
         <div class="relative top-10 mx-auto p-5 border w-full max-w-4xl shadow-lg rounded-md bg-white">
-            <div class="flex items-center justify-between mb-4">
-                <h3 class="text-2xl font-bold text-gray-900" id="modalCarTitle">Car Details</h3>
+            <div class="mt-3">
+                <h3 class="text-2xl font-medium text-gray-900" id="modalCarTitle">Car Details</h3>
                 <button onclick="closeCarModal()" class="text-gray-400 hover:text-gray-600 text-2xl">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
+            
+            <div id="modalCarContent">
+                <!-- Content will be loaded dynamically -->
+            </div>
+            
+            <div class="flex justify-end space-x-3 mt-6">
+                <button onclick="closeCarModal()" class="btn btn-secondary">Close</button>
+                <button onclick="bookCarFromModal()" class="btn btn-primary">
+                    <i class="fas fa-calendar-check mr-2"></i>
+                    Book This Car
+                </button>
+            </div>
+        </div>
+    </div>
             
             <div id="modalCarContent">
                 <!-- Content will be loaded dynamically -->
@@ -409,11 +558,13 @@ function closeCarModal() {
     currentCarId = null;
 }
 
-// Book car
-function bookCar(carId) {
+// Book car (create quick booking without leaving page)
+function bookCarQuick(carId) {
     <?php if (isset($_SESSION['user_id'])): ?>
-        window.location.href = `booking.php?car_id=${carId}`;
+        // Show booking modal instead of redirecting
+        showBookingModal(carId);
     <?php else: ?>
+        // Redirect to login page with return URL
         window.location.href = `login.php?redirect=booking.php&car_id=${carId}`;
     <?php endif; ?>
 }
@@ -457,10 +608,69 @@ function debounce(func, wait) {
     };
 }
 
+// Show quick booking modal
+function showBookingModal(carId) {
+    const modal = document.getElementById('quickBookingModal');
+    const car = carsData[carId];
+    
+    if (car) {
+        // Set car ID in hidden form field
+        const modalCarIdInput = document.getElementById('modalCarId');
+        if (modalCarIdInput) {
+            modalCarIdInput.value = carId;
+        }
+        
+        document.getElementById('modalCarTitle').textContent = `Quick Booking - ${car.make} ${car.model}`;
+        
+        // Set default dates (Tomorrow at 9 AM to day after at 5 PM)
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        const dayAfter = new Date(tomorrow);
+        
+        // Format dates for input fields
+        document.querySelector('input[name="start_date"]').value = tomorrow.toISOString().split('T')[0];
+        document.querySelector('select[name="start_time"]').value = '09:00';
+        document.querySelector('input[name="end_date"]').value = dayAfter.toISOString().split('T')[0];
+        document.querySelector('select[name="end_time"]').value = '17:00';
+        
+        // Calculate estimated cost
+        const days = Math.ceil((dayAfter - tomorrow) / (1000 * 60 * 60 * 24));
+        const total = car.daily_rate * days;
+        const estimatedCostElement = document.getElementById('estimatedCost');
+        if (estimatedCostElement) {
+            estimatedCostElement.textContent = `$${total.toFixed(2)} (${days} days)`;
+        }
+        
+        modal.classList.remove('hidden');
+    }
+}
+
+// Close quick booking modal
+function closeQuickBookingModal() {
+    document.getElementById('quickBookingModal').classList.add('hidden');
+}
+
+// Book car (create quick booking)
+function bookCar(carId) {
+    <?php if (isset($_SESSION['user_id'])): ?>
+        // Show booking modal instead of redirecting
+        showBookingModal(carId);
+    <?php else: ?>
+        // Redirect to login page with return URL
+        window.location.href = `login.php?redirect=booking.php&car_id=${carId}`;
+    <?php endif; ?>
+}
+
 // Close modal when clicking outside
 document.getElementById('carModal')?.addEventListener('click', function(e) {
     if (e.target === this) {
         closeCarModal();
+    }
+});
+
+document.getElementById('quickBookingModal')?.addEventListener('click', function(e) {
+    if (e.target === this) {
+        closeQuickBookingModal();
     }
 });
 </script>

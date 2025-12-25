@@ -39,11 +39,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <main class="flex-grow min-h-screen flex items-center justify-center py-12">
     <div class="max-w-md w-full mx-auto px-4">
-        <div class="card animate-scale-in">
+        <div class="card animate-scale-in shadow-xl">
             <div class="card-body p-8">
                 <!-- Header -->
                 <div class="text-center mb-8">
-                    <i class="fas fa-user-plus text-4xl text-primary-600 mb-4"></i>
+                    <i class="fas fa-user-plus text-4xl text-blue-600 mb-4"></i>
                     <h1 class="text-3xl font-bold text-gray-900 mb-2">Create Account</h1>
                     <p class="text-gray-600">Join Marrak Rent Car today</p>
                 </div>
@@ -61,10 +61,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 <!-- Registration Form -->
                 <form method="POST" class="space-y-6" data-validate>
-                    <div>
+                    <div class="flex flex-col">
                         <label for="name" class="form-label">Full Name *</label>
                         <input type="text" id="name" name="name" required
-                               class="form-input"
+                               class="form-input p-2"
                                value="<?php echo htmlspecialchars($data['name'] ?? ''); ?>"
                                placeholder="John Doe">
                         <?php if (isset($errors['name'])): ?>
@@ -72,10 +72,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endif; ?>
                     </div>
                     
-                    <div>
+                    <div class="flex flex-col">
                         <label for="email" class="form-label">Email Address *</label>
                         <input type="email" id="email" name="email" required
-                               class="form-input"
+                               class="form-input p-2"
                                value="<?php echo htmlspecialchars($data['email'] ?? ''); ?>"
                                placeholder="john@example.com">
                         <?php if (isset($errors['email'])): ?>
@@ -83,10 +83,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <?php endif; ?>
                     </div>
                     
-                    <div>
+                    <div class="flex flex-col">
                         <label for="phone" class="form-label">Phone Number</label>
                         <input type="tel" id="phone" name="phone"
-                               class="form-input"
+                               class="form-input p-2"
                                value="<?php echo htmlspecialchars($data['phone'] ?? ''); ?>"
                                placeholder="+1 (555) 123-4567">
                         <?php if (isset($errors['phone'])): ?>
@@ -98,7 +98,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="password" class="form-label">Password *</label>
                         <div class="relative">
                             <input type="password" id="password" name="password" required
-                                   class="form-input pr-10"
+                                   class="form-input py-2 pl-2 pr-30"
                                    placeholder="••••••••">
                             <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center"
                                     onclick="togglePassword('password')">
@@ -115,7 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <label for="confirm_password" class="form-label">Confirm Password *</label>
                         <div class="relative">
                             <input type="password" id="confirm_password" name="confirm_password" required
-                                   class="form-input pr-10"
+                                   class="form-input  py-2 pl-2 pr-30"
                                    placeholder="••••••••">
                             <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center"
                                     onclick="togglePassword('confirm_password')">
@@ -129,15 +129,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     
                     <div class="flex items-center">
                         <input type="checkbox" id="terms" name="terms" required
-                               class="h-4 w-4 text-primary-600 focus:ring-primary-500 border-gray-300 rounded">
+                               class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
                         <label for="terms" class="ml-2 block text-sm text-gray-700">
-                            I agree to the <a href="#" class="text-primary-600 hover:text-primary-500">Terms and Conditions</a>
-                            and <a href="#" class="text-primary-600 hover:text-primary-500">Privacy Policy</a>
+                            I agree to the <a href="#" class="text-blue-600 hover:text-blue-500">Terms and Conditions</a>
+                            and <a href="#" class="text-blue-600 hover:text-blue-500">Privacy Policy</a>
                         </label>
                     </div>
                     
                     <div>
-                        <button type="submit" class="w-full btn btn-primary py-3 text-lg">
+                        <button type="submit" class="w-full text-white bg-blue-500 rounded-lg py-3 text-lg hover:bg-blue-600 hover:text-amber-300 transition-all">
                             <i class="fas fa-user-plus mr-2"></i>
                             Create Account
                         </button>
@@ -148,7 +148,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="text-center mt-6">
                     <p class="text-gray-600">
                         Already have an account? 
-                        <a href="login.php" class="text-primary-600 hover:text-primary-500 font-medium">
+                        <a href="login.php" class="text-blue-600 hover:text-blue-500 font-medium">
                             Sign In
                         </a>
                     </p>

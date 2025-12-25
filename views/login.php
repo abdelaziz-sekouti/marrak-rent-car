@@ -86,10 +86,10 @@ if (isset($_SESSION['user_id'])) {
                 
                 <!-- Login Form -->
                 <form method="POST" class="space-y-6" data-validate>
-                    <div>
+                    <div class="flex flex-col">
                         <label for="email" class="form-label">Email Address *</label>
                         <input type="email" id="email" name="email" required
-                               class="form-input"
+                               class="form-input p-2"
                                value="<?php echo htmlspecialchars($data['email'] ?? ''); ?>"
                                placeholder="john@example.com"
                                autocomplete="email">
@@ -98,11 +98,11 @@ if (isset($_SESSION['user_id'])) {
                         <?php endif; ?>
                     </div>
                     
-                    <div>
+                    <div class="flex flex-col">
                         <label for="password" class="form-label">Password *</label>
                         <div class="relative">
                             <input type="password" id="password" name="password" required
-                                   class="form-input pr-10"
+                                   class="form-input py-2 pl-3 pr-30"
                                    placeholder="••••••••"
                                    autocomplete="current-password">
                             <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center"
@@ -129,7 +129,7 @@ if (isset($_SESSION['user_id'])) {
                     </div>
                     
                     <div>
-                        <button type="submit" class="w-full btn btn-primary py-3 text-lg">
+                        <button type="submit" class="w-full bg-blue-500 text-white transition-all hover:bg-blue-600 hover:text-amber-200 py-3 text-lg">
                             <i class="fas fa-sign-in-alt mr-2"></i>
                             Sign In
                         </button>
