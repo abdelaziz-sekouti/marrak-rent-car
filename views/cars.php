@@ -387,9 +387,9 @@ $page_description = 'Browse our wide selection of rental cars with competitive p
                 <!-- Content will be loaded dynamically -->
             </div>
             
-            <div class="flex bg-blue-400 justify-end space-x-3 mt-6">
-                <button onclick="closeCarModal()" class="bg-red-300">Close</button>
-                <button onclick="bookCarFromModal()" class="bg-indigo-600">
+            <div class="flex justify-end space-x-3 mt-6">
+                <button onclick="closeCarModal()" class="bg-red-300 p-2 px-10 rounded-lg cursor-pointer">Close</button>
+                <button onclick="bookCarFromModal()" class="bg-indigo-600 p-2 px-4 rounded-lg cursor-pointer">
                     <i class="fas fa-calendar-check mr-2"></i>
                     Book This Car
                 </button>
@@ -574,7 +574,7 @@ function bookCarQuick(carId) {
 // Book from modal
 function bookCarFromModal() {
     if (currentCarId) {
-        closeCarModal();
+        // closeCarModal();
         bookCar(currentCarId);
     }
 }
