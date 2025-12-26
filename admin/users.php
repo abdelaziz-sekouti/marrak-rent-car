@@ -50,7 +50,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'name' => trim($_POST['name'] ?? ''),
             'email' => trim($_POST['email'] ?? ''),
             'phone' => trim($_POST['phone'] ?? ''),
-            'role' => $_POST['role'] ?? 'customer'
+            'role' => $_POST['role'] ?? 'customer',
+            'status' => $_POST['status'] ?? 'active'
         ];
         
         $errors = $userModel->validateUserData($data, $id);
@@ -421,8 +422,8 @@ $page_title = 'User Management';
         <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
             <div class="mt-3">
                 <h3 class="text-lg font-medium text-gray-900 mb-4">Edit User</h3>
-                <form method="POST" action="edit-user.php">
-                    <input type="hidden" name="action" value="update">
+                <form method="POST" action="users.php">
+                    <input type="hidden" name="action" value="edit">
                     <input type="hidden" id="editUserId" name="id" value="">
                     <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
                     
@@ -449,6 +450,17 @@ $page_title = 'User Management';
                             <option value="admin">Admin</option>
                         </select>
                     </div>
+                    
+                  <!--
+                  <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                        <select id="editStatus" name="status" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                
+                -->
                     
                     <div class="mb-4">
                         <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
