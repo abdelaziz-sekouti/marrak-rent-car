@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <main class="flex-grow min-h-screen flex items-center justify-center py-12">
     <div class="max-w-md w-full mx-auto px-4">
-        <div class="card animate-scale-in shadow-xl">
+        <div class="card transition-transform duration-300 transform scale-95 hover:scale-100 shadow-xl">
             <div class="card-body p-8">
                 <!-- Header -->
                 <div class="text-center mb-8">

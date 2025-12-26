@@ -129,13 +129,13 @@ function requireAdmin() {
     }
 }
 
-// Apply sanitization to all request data
+// Note: Sanitization should be applied at output, not input for database operations
+// Only sanitize GET data for display purposes
 if (isset($_SERVER['REQUEST_METHOD'])) {
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $_POST = sanitizeInput($_POST);
-        $_FILES = sanitizeInput($_FILES);
-    } elseif ($_SERVER['REQUEST_METHOD'] === 'GET') {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $_GET = sanitizeInput($_GET);
     }
+    // POST data will be sanitized at output/display time
+    // $_FILES = sanitizeInput($_FILES); // Commented out to preserve file upload functionality
 }
 ?>

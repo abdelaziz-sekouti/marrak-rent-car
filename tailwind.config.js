@@ -44,6 +44,10 @@ module.exports = {
       animation: {
         'fade-in': 'fadeIn 0.5s ease-in-out',
         'slide-up': 'slideUp 0.3s ease-out',
+        'glow': 'glow 1.5s infinite', // Link the keyframes to an animation duration/iteration
+        'float': 'float 3s ease-in-out infinite', // Use the custom animation
+         'bounce-in': 'bounce-in 1s ease-out forwards', // 'forwards' ensures it stops at the end
+
       },
       keyframes: {
         fadeIn: {
@@ -53,11 +57,31 @@ module.exports = {
         slideUp: {
           '0%': { transform: 'translateY(10px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
-        }
-      }
-    },
+        },
+         glow: {
+          '0%, 100%': { // Define the start and end states
+            boxShadow: '0 0 10px rgba(255, 0, 255, 0.7)', // Example purple glow
+          },
+          '50%': { // Define the middle state for the pulsating effect
+            boxShadow: '0 0 20px rgba(255, 0, 255, 1)',
+          },
+        },
+       float: {
+          '0%, 100%': { transform: 'translateY(0px)' }, // Start and end position
+          '50%': { transform: 'translateY(-10px)' },   // Midpoint (adjust -10px for height)
+        },
+        'bounce-in': {
+          '0%, 20%, 40%, 60%, 80%, 100%': {
+            transform: 'translateY(0)'
+          },
+          '0%': { transform: 'scale(0.5)', opacity: '0' },
+          '100%': { transform: 'scale(1)', opacity: '1' },
+        },
+      },
+    }
   },
   plugins: [
     require('@tailwindcss/forms'),
   ],
 }
+

@@ -387,9 +387,9 @@ $page_description = 'Browse our wide selection of rental cars with competitive p
                 <!-- Content will be loaded dynamically -->
             </div>
             
-            <div class="flex justify-end space-x-3 mt-6">
-                <button onclick="closeCarModal()" class="btn btn-secondary">Close</button>
-                <button onclick="bookCarFromModal()" class="btn btn-primary">
+            <div class="flex bg-blue-400 justify-end space-x-3 mt-6">
+                <button onclick="closeCarModal()" class="bg-red-300">Close</button>
+                <button onclick="bookCarFromModal()" class="bg-indigo-600">
                     <i class="fas fa-calendar-check mr-2"></i>
                     Book This Car
                 </button>
@@ -401,13 +401,15 @@ $page_description = 'Browse our wide selection of rental cars with competitive p
                 <!-- Content will be loaded dynamically -->
             </div>
             
-            <div class="flex justify-end space-x-3 mt-6">
+            <!--
+            <div class="bg-blue-400 flex justify-end space-x-3 mt-6">
                 <button onclick="closeCarModal()" class="btn btn-secondary">Close</button>
                 <button onclick="bookCarFromModal()" class="btn btn-primary">
                     <i class="fas fa-calendar-check mr-2"></i>
                     Book This Car
                 </button>
             </div>
+            -->
         </div>
     </div>
 </main>

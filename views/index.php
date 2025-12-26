@@ -233,7 +233,7 @@ require_once '../includes/header.php';
                     <div class="card group scroll-animate relative overflow-hidden" style="animation-delay: 0.3s;">
                         <!-- Premium Badge -->
                         <div class="absolute top-4 right-4 z-10">
-                            <span class="bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full text-sm font-bold animate-glow">
+                            <span class="bg-linear-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full text-sm font-bold animate-glow">
                                 <i class="fas fa-crown mr-1"></i> Premium
                             </span>
                         </div>

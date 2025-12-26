@@ -5,8 +5,9 @@ This file contains guidelines and commands for agentic coding agents working in 
 ## Project Stack
 - **Backend**: PHP 8.x with MySQL (Vanilla PHP, no Composer)
 - **Frontend**: JavaScript (ES6+), HTML5, CSS3
-- **Styling**: TailwindCSS
+- **Styling**: TailwindCSS with custom theme
 - **Build Tools**: npm (JS only), Manual PHP testing
+- **Database**: Custom PDO wrapper class
 
 ## Build/Test/Lint Commands
 
@@ -18,48 +19,48 @@ php -l path/to/file.php
 # Run PHP built-in web server for testing
 php -S localhost:8000
 
-# Run PHP syntax check on all PHP files in directory
+# Run PHP syntax check on all PHP files
 find . -name "*.php" -exec php -l {} \;
 
-# Run migration script
+# Run database migration
 php migrate.php
 
-# Run specific test files manually
+# Run specific test files
 php test-car.php
 php test.php
+
+# Check for common PHP issues
+php -d display_errors=1 test-car.php
 ```
 
 ### JavaScript Commands
 ```bash
-# Install Node.js dependencies
+# Install dependencies
 npm install
 
-# Run development server
+# Development (CSS watch)
 npm run dev
 
-# Build for production
+# Production build
 npm run build
 
-# Run JavaScript linter
+# Lint JavaScript
 npm run lint
-# or
-npx eslint path/to/file.js
+npx eslint public/js/**/*.js
 
-# Fix linting issues automatically
+# Auto-fix linting
 npm run lint:fix
 
-# Run JavaScript tests
+# Run tests
 npm test
 
-# Run specific test file
-npm test -- --grep "test name"
-# or
-npx jest path/to/test.js
+# Run specific test
+npx jest test/car.test.js
 
-# Run TailwindCSS build
+# Build CSS
 npm run build:css
 
-# Watch CSS changes
+# Watch CSS
 npm run watch:css
 ```
 

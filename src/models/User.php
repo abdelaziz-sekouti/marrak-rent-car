@@ -36,7 +36,7 @@ class User {
                 return ['success' => false, 'message' => 'Registration failed'];
             }
         } catch (PDOException $e) {
-            return ['success' => false, 'message' => 'Database error: ' . $e->getMessage()];
+            return ['success' => false, 'message' => 'Database error'];
         }
     }
     
@@ -62,7 +62,7 @@ class User {
      * Get user by ID
      */
     public function getUserById($id) {
-        $this->db->query("SELECT id, name, email, phone, role, created_at FROM users WHERE id = :id");
+        $this->db->query("SELECT id, name, email, phone, role, status, created_at, updated_at FROM users WHERE id = :id");
         $this->db->bind(':id', $id);
         
         return $this->db->single();
@@ -224,15 +224,41 @@ class User {
      */
     public function updateUser($id, $data) {
         try {
-            $this->db->query("UPDATE users SET name = :name, email = :email, phone = :phone, role = :role WHERE id = :id");
+            $sql = "UPDATE users SET name = :name, email = :email, phone = :phone, role = :role";
+            
+            // Add status if provided
+            if (isset($data['status'])) {
+                $sql .= ", status = :status";
+            }
+            
+            // Add password if provided
+            if (isset($data['password'])) {
+                $sql .= ", password = :password";
+            }
+            
+            $sql .= " WHERE id = :id";
+            
+            $this->db->query($sql);
             
             $this->db->bind(':name', $data['name']);
             $this->db->bind(':email', $data['email']);
             $this->db->bind(':phone', $data['phone']);
             $this->db->bind(':role', $data['role']);
+            
+            if (isset($data['status'])) {
+                $this->db->bind(':status', $data['status']);
+            }
+            
+            if (isset($data['password'])) {
+                $hashedPassword = password_hash($data['password'], PASSWORD_DEFAULT);
+                $this->db->bind(':password', $hashedPassword);
+            }
+            
             $this->db->bind(':id', $id);
             
-            return $this->db->execute();
+            $result = $this->db->execute();
+            
+            return $result;
         } catch (PDOException $e) {
             error_log("Update user error: " . $e->getMessage());
             return false;

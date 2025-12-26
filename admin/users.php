@@ -318,7 +318,7 @@ $page_title = 'User Management';
                                             </span>
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                            <button onclick="editUser(<?php echo $user['id']; ?>)" class="text-primary-600 hover:text-primary-900 mr-3">
+                                            <button onclick="editUser(<?php echo $user['id']; ?>, event)" class="text-primary-600 hover:text-primary-900 mr-3">
                                                 <i class="fas fa-edit"></i>
                                             </button>
                                             <button onclick="toggleUserStatus(<?php echo $user['id']; ?>)" class="text-yellow-600 hover:text-yellow-900 mr-3">
@@ -416,6 +416,57 @@ $page_title = 'User Management';
         </div>
     </div>
     
+    <!-- Edit User Modal -->
+    <div id="editUserModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 hidden overflow-y-auto h-full w-full z-50">
+        <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+                <h3 class="text-lg font-medium text-gray-900 mb-4">Edit User</h3>
+                <form method="POST" action="edit-user.php">
+                    <input type="hidden" name="action" value="update">
+                    <input type="hidden" id="editUserId" name="id" value="">
+                    <input type="hidden" name="csrf_token" value="<?php echo generateCSRFToken(); ?>">
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                        <input type="text" id="editName" name="name" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="editEmail" name="email" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                        <input type="tel" id="editPhone" name="phone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500">
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Role</label>
+                        <select id="editRole" name="role" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500">
+                            <option value="customer">Customer</option>
+                            <option value="staff">Staff</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+                        <select id="editStatus" name="status" required class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-primary-500 focus:border-primary-500">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex justify-end space-x-3">
+                        <button type="button" onclick="closeEditUserModal()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
+                        <button type="submit" class="px-4 py-2 bg-primary-600 text-white rounded-md hover:bg-primary-700">Update User</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
     <script>
         function openAddUserModal() {
             document.getElementById('addUserModal').classList.remove('hidden');
@@ -425,9 +476,48 @@ $page_title = 'User Management';
             document.getElementById('addUserModal').classList.add('hidden');
         }
         
-        function editUser(userId) {
-            // Load user data and open edit modal
-            window.location.href = `edit-user.php?id=${userId}`;
+        function editUser(userId, event) {
+            console.log('Editing user:', userId);
+            
+            // Prevent any issues with event propagation
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+                
+            }
+                // Load user data and open edit modal
+                openEditUserModal(userId);
+        }
+        
+        function openEditUserModal(userId) {
+            // Fetch user data and populate modal
+            fetch(`get-user-data.php?id=${userId}`)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        populateEditModal(data.user);
+                        document.getElementById('editUserModal').classList.remove('hidden');
+                    } else {
+                        alert('Error loading user data');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error loading user data');
+                });
+        }
+        
+        function populateEditModal(user) {
+            document.getElementById('editUserId').value = user.id;
+            document.getElementById('editName').value = user.name;
+            document.getElementById('editEmail').value = user.email;
+            document.getElementById('editPhone').value = user.phone || '';
+            document.getElementById('editRole').value = user.role;
+            document.getElementById('editStatus').value = user.status || 'active';
+        }
+        
+        function closeEditUserModal() {
+            document.getElementById('editUserModal').classList.add('hidden');
         }
         
         function deleteUser(userId) {
@@ -464,9 +554,14 @@ $page_title = 'User Management';
         
         // Close modal when clicking outside
         window.onclick = function(event) {
-            const modal = document.getElementById('addUserModal');
-            if (event.target === modal) {
+            const addModal = document.getElementById('addUserModal');
+            const editModal = document.getElementById('editUserModal');
+            
+            if (event.target === addModal) {
                 closeAddUserModal();
+            }
+            if (event.target === editModal) {
+                closeEditUserModal();
             }
         }
     </script>
